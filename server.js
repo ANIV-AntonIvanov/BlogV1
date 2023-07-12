@@ -83,7 +83,6 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
     console.log(userArr)
     user.save()
     res.redirect("/login")
-    console.log(JSON.parse(User.find()))
   } catch (err) {
     console.log(err)
     res.redirect("/register")

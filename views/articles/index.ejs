@@ -14,14 +14,16 @@
         <li class="nav-item active">
           <a class="nav-link" href="/">Blogs <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item"></div>
           <a class="nav-link" href="/about">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/login">Login</a>
         </li>
       </ul>
   </nav>
+  <div class="text-right mt-2 mr-2">
+    <form action="/logout?_method=DELETE" method="POST">
+      <button class="rounded" type="submit">Logout</button>
+    </form>
+  </div>
   <div class="container">
     <a href="/articles/new" class="btn btn-success mt-4">New Article</a>
     <% articles.forEach(article => { %>

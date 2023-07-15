@@ -80,20 +80,19 @@ app.get('/register', checkNotAuthenticated, async (req, res) => {
   res.render('articles/register')
 })
 //page render
-//Login
 
+//Login
 app.post('/login', checkNotAuthenticated, passport.authenticate("local", {
 
   successRedirect: '/',
   failureRedirect: "/login",
   failureFlash: true
 }))
-
 //Login
+
 //Passing register data
 app.post('/register', checkNotAuthenticated, async (req, res) => {
   try {
-    //const hashedPassword = await bcrypt.hash(req.body.password, 10)
     var user = new User({
       id: Date.now().toString(),
       name: req.body.name,

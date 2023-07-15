@@ -72,7 +72,7 @@ app.get('/about', async (req, res) => {
   res.render('articles/about')
 })
 
-app.get('/userspage', async (req, res) => {
+app.get('/visitorsview', async (req, res) => {
   const articles = await Article.find().sort({ createdAt: 'desc' })
   res.render('articles/indexForNormalUsers', { articles: articles })
 })

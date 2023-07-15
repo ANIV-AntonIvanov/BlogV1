@@ -1,7 +1,7 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
-
+const { MongoClient } = require("mongodb")
 const express = require('express')
 const mongoose = require('mongoose')
 const Article = require('./models/article')
@@ -15,14 +15,34 @@ const flash = require("express-flash")
 const session = require("express-session")
 const bodyParser = require('body-parser');
 var User = require('./models/user')
+const uri = "mongodb://127.0.0.1:27017/blog";
+
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const userArr = []
+
+client.connect()
+  .then(() => {
+    const db = client.db("blog");
+    const collection = db.collection("users");
+    return collection.find({}).toArray();
+  })
+  .then((users) => {
+    userArr.push(...users);
+    client.close();
+  })
+  .catch((err) => {
+    console.error("Error retrieving users:", err);
+  });
 
 initializePassport(
   passport,
   email => userArr.find(user => user.email === email),
   id => userArr.find(user => user.id === id)
 )
-
-const userArr = []
 
 db = mongoose.connect('mongodb://127.0.0.1:27017/blog', {
   useNewUrlParser: true, useUnifiedTopology: true
@@ -61,7 +81,9 @@ app.get('/register', checkNotAuthenticated, async (req, res) => {
 })
 //page render
 //Login
+
 app.post('/login', checkNotAuthenticated, passport.authenticate("local", {
+
   successRedirect: '/',
   failureRedirect: "/login",
   failureFlash: true
@@ -78,7 +100,7 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
       email: req.body.email,
       hashedPassword: await bcrypt.hash(req.body.password, 10)
     })
-    User.find()
+    console.log(user)
     userArr.push(user)
     console.log(userArr)
     user.save()

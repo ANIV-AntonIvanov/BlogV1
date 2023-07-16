@@ -74,7 +74,7 @@ app.get('/about', async (req, res) => {
 
 app.get('/visitorsview', async (req, res) => {
   const articles = await Article.find().sort({ createdAt: 'desc' })
-  res.render('articles/indexForNormalUsers', { articles: articles })
+  res.render('articles/indexForVisitors', { articles: articles })
 })
 
 app.get('/login', checkNotAuthenticated, async (req, res) => {

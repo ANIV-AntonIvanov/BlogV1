@@ -104,9 +104,7 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
       email: req.body.email,
       hashedPassword: await bcrypt.hash(req.body.password, 10)
     })
-    console.log(user)
     userArr.push(user)
-    console.log(userArr)
     user.save()
     res.redirect("/login")
   } catch (err) {
@@ -137,6 +135,8 @@ function checkAuthenticated(req, res, next) {
   }
   res.redirect("/login")
 }
+
+app.use(express.static('./pictures'));
 
 app.use('/articles', articleRouter)
 

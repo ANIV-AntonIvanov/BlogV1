@@ -18,8 +18,8 @@
       </picture>
     </a>
     <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="/">Blogs <span class="sr-only">(current)</span></a>
+      <li class="nav-item">
+        <a class="nav-link text-center text-dark" href="/visitorsview">Visitor view</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/about">About</a>
@@ -35,15 +35,12 @@
         </button>
       </div>
     </form>
-    <div class="nav-item">
-      <a class="nav-link text-center text-dark" href="/visitorsview">Visitor view</a>
-    </div>
-    <div class="text-right mt-2 mr-2">
-      <form action="/logout?_method=DELETE" method="POST">
-        <button class="rounded btn btn-warning" type="submit">Logout</button>
-      </form>
-    </div>
   </nav>
+  <div class="text-right">
+    <form action="/logout?_method=DELETE" method="POST">
+      <button class="rounded btn btn-warning mt-3 mr-3" type="submit">Logout</button>
+    </form>
+  </div>
   <div class="container">
     <a href="/articles/new" class="btn btn-success mt-4">New Article</a>
     <% articles.forEach(article=> { %>

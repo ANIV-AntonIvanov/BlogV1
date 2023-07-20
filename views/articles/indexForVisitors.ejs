@@ -25,14 +25,16 @@
         <a class="nav-link" href="/about">About</a>
       </li>
     </ul>
-    <div class="input-group">
-      <div class="form-outline mr-2">
-        <input type="search" id="form1" class="form-control" />
+    <form action="/search" method="GET">
+      <div class="input-group">
+        <div class="form-outline mr-2">
+          <input type="search" id="form1" class="form-control" name="query" />
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-search">Search</i>
+        </button>
       </div>
-      <button type="button" class="btn btn-primary">
-        <i class="fas fa-search">Search</i>
-      </button>
-    </div>
+    </form>
     <a class="nav-link text-center text-dark" href="/login">Login</a>
   </nav>
   <div class="container">

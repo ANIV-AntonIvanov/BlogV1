@@ -135,6 +135,34 @@ function checkAuthenticated(req, res, next) {
   }
   res.redirect("/login")
 }
+//
+
+MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(client => {
+    const db = client.db();
+
+    app.use(express.urlencoded({ extended: true }));
+    app.use(express.json());
+
+    app.get('/search', async (req, res) => {
+      const query = req.query.query;
+
+      try {
+        await db.collection('articles').createIndex({ '$**': 'text' });
+        const articles = await db.collection('articles').find({ $text: { $search: query } }).toArray();
+        res.render('articles/indexSearchResults', { articles });
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('An error occurred while processing the search.');
+      }
+    });
+
+    // The rest of your existing routes...
+  })
+  .catch(err => {
+    console.error('Failed to connect to the database:', err);
+  });
+//
 
 app.use(express.static('./pictures'));
 

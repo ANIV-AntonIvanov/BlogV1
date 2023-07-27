@@ -69,7 +69,7 @@ app.get('/', checkAuthenticated, async (req, res) => {
 })
 
 app.get('/about', async (req, res) => {
-  res.render('articles/about')
+  res.render('../views/about')
 })
 
 app.get('/visitorsview', async (req, res) => {
@@ -78,11 +78,11 @@ app.get('/visitorsview', async (req, res) => {
 })
 
 app.get('/login', checkNotAuthenticated, async (req, res) => {
-  res.render('articles/login')
+  res.render('../views/login')
 })
 
 app.get('/register', checkNotAuthenticated, async (req, res) => {
-  res.render('articles/register')
+  res.render('../views/register')
 })
 //page render
 
@@ -113,7 +113,7 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
       hashedPassword: await bcrypt.hash(password, 10),
       code: code,
     })
-    
+
     console.log(rngCode)
     if (user.code === rngCode) {
       userArr.push(user)

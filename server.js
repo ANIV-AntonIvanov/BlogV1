@@ -94,22 +94,39 @@ app.post('/login', checkNotAuthenticated, passport.authenticate("local", {
   failureFlash: true
 }))
 //Login
-
+var rngCode = Math.floor(Math.random() * 1000)
+console.log(rngCode) //rng code for mod registration
 //Passing register data
 app.post('/register', checkNotAuthenticated, async (req, res) => {
   try {
+    const { name, email, password, code } = req.body;
+
+    const existingUser = await User.findOne({ $or: [{ name }, { email }] });
+    if (existingUser) {
+      return res.status(409).json({ message: 'Username or email already exists.' });
+    }
+
     var user = new User({
       id: Date.now().toString(),
-      name: req.body.name,
-      email: req.body.email,
-      hashedPassword: await bcrypt.hash(req.body.password, 10)
+      name: name,
+      email: email,
+      hashedPassword: await bcrypt.hash(password, 10),
+      code: code,
     })
-    userArr.push(user)
-    user.save()
-    res.redirect("/login")
+    
+    console.log(rngCode)
+    if (user.code === rngCode) {
+      userArr.push(user)
+      user.save()
+      res.redirect("/login")
+    } else {
+      rngCode = Math.floor(Math.random() * 10000)
+      console.log(rngCode)
+      res.redirect("/visitorsview")
+    }
+
   } catch (err) {
     console.log(err)
-    res.redirect("/register")
   }
 })
 //Passing register data

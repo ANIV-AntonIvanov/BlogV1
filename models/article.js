@@ -9,6 +9,9 @@ const articleSchema = new mongoose.Schema({
   description: {
     type: String
   },
+  links: {
+    type: String
+  },
   createdAt: {
     type: Date,
     default: Date.now

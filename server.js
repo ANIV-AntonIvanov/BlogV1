@@ -94,7 +94,7 @@ app.post('/login', checkNotAuthenticated, passport.authenticate("local", {
   failureFlash: true
 }))
 //Login
-var rngCode = Math.floor(Math.random() * 1000)
+var rngCode = Math.floor(Math.random() * (99999 - 10000) + 10000)
 console.log(rngCode) //rng code for mod registration
 //Passing register data
 app.post('/register', checkNotAuthenticated, async (req, res) => {

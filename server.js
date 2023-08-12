@@ -1,11 +1,12 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
+
 const { MongoClient } = require("mongodb")
 const express = require('express')
 const mongoose = require('mongoose')
 const Article = require('./models/article')
-const articleRouter = require('./routes/articles')
+const articleRouter = require('./articleRoute/articles')
 const methodOverride = require('method-override')
 const passport = require("passport")
 const app = express()
@@ -62,7 +63,7 @@ app.use(passport.session())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//page render
+//------------------Page render-------------------//
 app.get('/', checkAuthenticated, async (req, res) => {
   const articles = await Article.find().sort({ createdAt: 'desc' })
   res.render('articles/index', { articles: articles })
@@ -84,19 +85,28 @@ app.get('/login', checkNotAuthenticated, async (req, res) => {
 app.get('/register', checkNotAuthenticated, async (req, res) => {
   res.render('../views/register')
 })
-//page render
+//------------------Page render-------------------//
 
-//Login
+//-----------Login------------------//
 app.post('/login', checkNotAuthenticated, passport.authenticate("local", {
 
   successRedirect: '/',
   failureRedirect: "/login",
   failureFlash: true
 }))
-//Login
+
+app.delete("/logout", (req, res) => {
+  req.logout(req.user, err => {
+    if (err) return next(err)
+  })
+  res.redirect("/login")
+})
+//-----------Login------------------//
+
+//-----------Passing register data---------------//
 var rngCode = Math.floor(Math.random() * (99999 - 10000) + 10000)
-console.log(rngCode) //rng code for mod registration
-//Passing register data
+console.log(rngCode)
+
 app.post('/register', checkNotAuthenticated, async (req, res) => {
   try {
     const { name, email, password, code } = req.body;
@@ -122,23 +132,16 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
     } else {
       rngCode = Math.floor(Math.random() * 10000)
       console.log(rngCode)
-      res.redirect("/visitorsview")
+      res.redirect("/register")
     }
 
   } catch (err) {
     console.log(err)
   }
 })
-//Passing register data
+//-----------Passing register data---------------//
 
-app.delete("/logout", (req, res) => {
-  req.logout(req.user, err => {
-    if (err) return next(err)
-  })
-  res.redirect("/login")
-})
-
-//Auth functions
+//----------------Auth functions------------------------//
 function checkNotAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return res.redirect("/")
@@ -152,8 +155,9 @@ function checkAuthenticated(req, res, next) {
   }
   res.redirect("/login")
 }
-//
+//----------------Auth functions------------------------//
 
+//-------------Search-------------------------//
 MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(client => {
     const db = client.db();
@@ -173,13 +177,11 @@ MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
         res.status(500).send('An error occurred while processing the search.');
       }
     });
-
-    // The rest of your existing routes...
   })
   .catch(err => {
     console.error('Failed to connect to the database:', err);
   });
-//
+//-------------Search-------------------------//
 
 app.use(express.static('./pictures'));
 

@@ -6,6 +6,7 @@ PREREQUISITES TO START PROJECT
 3. Git 
 4. VS Code
 
--To clone run "git clone https://github.com/ANIV-AntonIvanov/BlogV1.git". With this option the project is cloned in your user directory
--To install packages if necessary "npm i"
--To run the project "npm run devStart", starts with localhost:5000
+-To clone run "git clone https://github.com/ANIV-AntonIvanov/BlogV1.git". With this option the project is cloned in your user directory.
+-To install packages if necessary "npm i".
+-Set up a connection in Mongo Atlas.
+-To run the project "npm run devStart", starts with localhost:5000.

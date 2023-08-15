@@ -1,3 +1,4 @@
+//----Packages,Libraries and Helpers--------------//
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
@@ -22,6 +23,22 @@ const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+app.use(express.urlencoded({ extended: false }))
+app.use(methodOverride('_method'))
+app.use(flash())
+app.use(session({
+  secret: process.env.SECRET_KEY,
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('./pictures'));
+app.use('/articles', articleRouter)
+//----Packages,Libraries and Helpers--------------//
 
 const userArr = []
 
@@ -49,20 +66,6 @@ db = mongoose.connect('mongodb://127.0.0.1:27017/blog', {
   useNewUrlParser: true, useUnifiedTopology: true
 })
 
-app.set('view engine', 'ejs')
-app.use(express.urlencoded({ extended: false }))
-app.use(methodOverride('_method'))
-app.use(flash())
-app.use(session({
-  secret: process.env.SECRET_KEY,
-  resave: false,
-  saveUninitialized: false
-}))
-app.use(passport.initialize())
-app.use(passport.session())
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 //------------------Page render-------------------//
 app.get('/', checkAuthenticated, async (req, res) => {
   const articles = await Article.find().sort({ createdAt: 'desc' })
@@ -89,7 +92,6 @@ app.get('/register', checkNotAuthenticated, async (req, res) => {
 
 //-----------Login------------------//
 app.post('/login', checkNotAuthenticated, passport.authenticate("local", {
-
   successRedirect: '/',
   failureRedirect: "/login",
   failureFlash: true
@@ -183,8 +185,6 @@ MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   });
 //-------------Search-------------------------//
 
-app.use(express.static('./pictures'));
-
-app.use('/articles', articleRouter)
+app.set('view engine', 'ejs')
 
 app.listen(5000)

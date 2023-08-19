@@ -46,14 +46,31 @@
           <div class="card-subtitle text-muted mb-2">
             <%= article.createdAt.toLocaleDateString() %>
           </div>
-          <div class="card-text mb-2">
+          <div class="card-text mb-2" id="articleContent_<%= article.id %>">
             <%- article.description %>
           </div>
+          <button id="readMoreButton_<%= article.id %>" class="btn btn-link" onclick="toggleArticle('<%= article.id %>')">Read More</button>
         </div>
         <!--comments-->
       </div>
       <% }) %>
   </div>
+
+  <script>
+    function toggleArticle(articleId) {
+      const articleContent = document.getElementById(`articleContent_${articleId}`);
+      const readMoreButton = document.getElementById(`readMoreButton_${articleId}`);
+  
+      if (articleContent.style.display === 'none' || articleContent.style.display === '') {
+        articleContent.style.display = 'block';
+        readMoreButton.innerText = 'Read Less';
+      } else {
+        articleContent.style.display = 'none';
+        readMoreButton.innerText = 'Read More';
+      }
+    }
+  </script>
+
 </body>
 <footer>
   <div class="text-center p-3 fixed-bottom mt-3" style="background-color: rgba(255, 255, 255);">
